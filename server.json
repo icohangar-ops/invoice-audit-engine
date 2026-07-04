@@ -1,0 +1,16 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Cubiczan/invoice-audit-engine",
+  "description": "Continuous vendor invoice anomaly detection for procure-to-pay (duplicates, entry lag, outliers, rate changes).",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "invoice-audit-engine",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

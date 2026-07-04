@@ -73,3 +73,55 @@ uv run ruff check .
 
 Engines are pure functions over plain dicts — every rule is unit-testable
 without network or fixtures.
+
+## MCP Server
+
+The audit rules are exposed as an [MCP](https://modelcontextprotocol.io) server
+so any MCP-compatible client (Claude Desktop, Cursor, agents, skills) can run
+invoice anomaly detection. It is a thin wrapper — all detection logic lives in
+`auditengine.rules` and is reused verbatim. Caller-supplied invoice/item rows
+are loaded into an in-memory SQLite copy (the engine's own schema), so audits
+run fully offline with no Precoro/network access.
+
+### Run it
+
+```bash
+# From a published package (once on PyPI):
+uvx --from invoice-audit-engine invoice-audit-mcp
+
+# From a checkout:
+uv run invoice-audit-mcp
+# or
+python -m auditengine.mcp_server
+```
+
+The server speaks **stdio**. Example Claude Desktop config:
+
+```json
+{
+  "mcpServers": {
+    "invoice-audit-engine": {
+      "command": "uvx",
+      "args": ["--from", "invoice-audit-engine", "invoice-audit-mcp"]
+    }
+  }
+}
+```
+
+### Tools
+
+| Tool | Description |
+|---|---|
+| `audit_invoices` | Run all rules over invoice (+ optional line-item) rows: duplicates, entry lag, overdue-unpaid, amount outliers, rate changes, new charge types, unexplained credits, inconsistent tax. Thresholds are tunable per call. |
+| `normalize_invoice_number` | Canonicalize an invoice number for duplicate detection |
+
+Run the MCP tests with `uv run pytest tests/test_mcp_server.py`.
+
+### Publishing
+
+Follows the same path proven by
+[codesentinel](https://github.com/Cubiczan/codesentinel) and
+[codehealth-mcp](https://github.com/Cubiczan/codehealth-mcp): namespace
+`io.github.Cubiczan` (see `server.json`), stdio transport, published to the
+[MCP Registry](https://github.com/modelcontextprotocol/registry) with the
+`mcp-publisher` CLI (not via PRs).
