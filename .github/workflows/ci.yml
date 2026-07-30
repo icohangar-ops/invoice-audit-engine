@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  parity:
+    # The eight invoice anomaly rules also exists as TypeScript in @cubiczan/finance-engines. This job
+    # proves the two still agree: it checks out finance-engines as a sibling and
+    # runs its cross-language parity suite against this repo's adapter.
+    #
+    # Without this, a formula can drift between the two stacks and produce two
+    # different numbers for the same input, silently.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: invoice-audit-engine
+
+      - name: Check out finance-engines (parity vectors + runner)
+        uses: actions/checkout@v4
+        with:
+          repository: icohangar-ops/finance-engines
+          path: finance-engines
+          # finance-engines is private, so this needs a token with read access to
+          # it. Add FINANCE_ENGINES_TOKEN as a repo or org secret. If it is absent
+          # the checkout step errors and the job fails — fail-closed, so a missing
+          # secret can never be mistaken for confirmed parity.
+          token: ${{ secrets.FINANCE_ENGINES_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install this engine
+        run: pip install -e .
+        working-directory: invoice-audit-engine
+
+      - name: Build finance-engines
+        run: npm ci && npm run build
+        working-directory: finance-engines
+
+      - name: Cross-language parity
+        run: |
+          python3 spec/run_parity.py \
+            --suite pyformat --suite audit \
+            --adapter-cmd "python3 ../invoice-audit-engine/spec_adapter.py"
+        working-directory: finance-engines
