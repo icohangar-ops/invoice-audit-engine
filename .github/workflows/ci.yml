@@ -16,6 +16,23 @@ jobs:
     # different numbers for the same input, silently.
     runs-on: ubuntu-latest
     steps:
+      - name: Require the parity token
+        # Fail with an actionable message rather than actions/checkout's cryptic
+        # "Input required and not supplied: token". Still fail-closed: a missing
+        # secret must never be mistaken for confirmed parity.
+        run: |
+          if [ -z "${{ secrets.FINANCE_ENGINES_TOKEN }}" ]; then
+            echo "::error::FINANCE_ENGINES_TOKEN is not set, so cross-language parity did NOT run."
+            echo ""
+            echo "This job needs read access to the private icohangar-ops/finance-engines"
+            echo "repo, which holds the parity vectors and runner. To enable it:"
+            echo ""
+            echo "  gh secret set FINANCE_ENGINES_TOKEN --repo icohangar-ops/${{ github.event.repository.name }}"
+            echo ""
+            echo "(or set it once at org level so all three donor repos inherit it)"
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
         with:
           path: invoice-audit-engine
