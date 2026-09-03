@@ -42,6 +42,9 @@ uv run uvicorn auditengine.web:app --port 8080
 
 The dashboard shows findings ranked by severity with dollar amounts, KPI
 rollups, and a `findings.csv` export for the AP team.
+UiPath can feed exported invoice JSON pages into `/import` or trigger `/sync`
+on a schedule when you want inbox-to-audit automation without changing the core
+Precoro sync logic.
 
 ## Precoro API notes
 
