@@ -156,6 +156,6 @@ Run the MCP tests with `uv run pytest tests/test_mcp_server.py`.
 Follows the same path proven by
 [codesentinel](https://github.com/Cubiczan/codesentinel) and
 [codehealth-mcp](https://github.com/Cubiczan/codehealth-mcp): namespace
-`io.github.Cubiczan` (see `server.json`), stdio transport, published to the
+`io.github.icohangar-ops/invoice-audit-engine` (see `server.json`), stdio transport, published to the
 [MCP Registry](https://github.com/modelcontextprotocol/registry) with the
 `mcp-publisher` CLI (not via PRs).

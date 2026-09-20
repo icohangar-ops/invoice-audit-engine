@@ -7,7 +7,7 @@ are supplied by the caller and loaded into an in-memory SQLite database (the
 same schema the engine uses), so audits run fully offline.
 
 Follows the same publishing path proven by codesentinel / codehealth-mcp:
-namespace ``io.github.Cubiczan``, stdio transport, published via the
+namespace ``io.github.icohangar-ops/invoice-audit-engine``, stdio transport, published via the
 ``mcp-publisher`` CLI (see the "MCP Server" section of the README).
 
 Run it:
