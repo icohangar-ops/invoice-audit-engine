@@ -1,0 +1,72 @@
+{
+  "title": "invoice-audit-engine",
+  "tables": [
+    {
+      "id": 0,
+      "name": "audit_invoices",
+      "x": 80,
+      "y": 80,
+      "fields": [
+        {"id": 0, "name": "id", "type": "INTEGER", "default": "", "check": "", "primary": true, "unique": false, "notNull": true, "increment": true, "comment": ""},
+        {"id": 1, "name": "invoice_number", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": true, "notNull": true, "increment": false, "comment": ""},
+        {"id": 2, "name": "vendor_name", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 3, "name": "invoice_date", "type": "DATE", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 4, "name": "due_date", "type": "DATE", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 5, "name": "total_amount", "type": "NUMERIC", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 6, "name": "status", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 7, "name": "source_path", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 8, "name": "created_at", "type": "TIMESTAMP", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""}
+      ],
+      "comment": "",
+      "indices": [],
+      "color": "#7d9dff"
+    },
+    {
+      "id": 1,
+      "name": "audit_items",
+      "x": 420,
+      "y": 80,
+      "fields": [
+        {"id": 0, "name": "id", "type": "INTEGER", "default": "", "check": "", "primary": true, "unique": false, "notNull": true, "increment": true, "comment": ""},
+        {"id": 1, "name": "invoice_id", "type": "INTEGER", "default": "", "check": "", "primary": false, "unique": false, "notNull": true, "increment": false, "comment": ""},
+        {"id": 2, "name": "line_number", "type": "INTEGER", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 3, "name": "description", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 4, "name": "amount", "type": "NUMERIC", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 5, "name": "category", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 6, "name": "match_confidence", "type": "NUMERIC", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 7, "name": "extracted_from", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""}
+      ],
+      "comment": "",
+      "indices": [],
+      "color": "#ffe159"
+    },
+    {
+      "id": 2,
+      "name": "audit_findings",
+      "x": 760,
+      "y": 80,
+      "fields": [
+        {"id": 0, "name": "id", "type": "INTEGER", "default": "", "check": "", "primary": true, "unique": false, "notNull": true, "increment": true, "comment": ""},
+        {"id": 1, "name": "invoice_id", "type": "INTEGER", "default": "", "check": "", "primary": false, "unique": false, "notNull": true, "increment": false, "comment": ""},
+        {"id": 2, "name": "severity", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 3, "name": "finding_type", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 4, "name": "message", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 5, "name": "evidence", "type": "TEXT", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 6, "name": "resolved", "type": "BOOLEAN", "default": false, "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""},
+        {"id": 7, "name": "created_at", "type": "TIMESTAMP", "default": "", "check": "", "primary": false, "unique": false, "notNull": false, "increment": false, "comment": ""}
+      ],
+      "comment": "",
+      "indices": [],
+      "color": "#9be7a2"
+    }
+  ],
+  "relationships": [
+    {"startTableId": 1, "startFieldId": 1, "endTableId": 0, "endFieldId": 0, "name": "audit_items_invoice_id_fk", "cardinality": "many_to_one", "updateConstraint": "No action", "deleteConstraint": "No action", "id": 0},
+    {"startTableId": 2, "startFieldId": 1, "endTableId": 0, "endFieldId": 0, "name": "audit_findings_invoice_id_fk", "cardinality": "many_to_one", "updateConstraint": "No action", "deleteConstraint": "No action", "id": 1}
+  ],
+  "notes": [],
+  "subjectAreas": [],
+  "types": [],
+  "enums": [],
+  "views": []
+}
