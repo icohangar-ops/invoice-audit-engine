@@ -36,7 +36,7 @@ button,input[type=submit]{background:#0f3d2e;color:#fff;border:0;border-radius:6
 input,select{padding:7px;border:1px solid #cbd5e0;border-radius:6px}
 """
 
-NAV = '<a href="/">Home</a>'
+NAV = '<a href="/">Home</a><a href="/decisions">Decisions</a>'
 
 
 def page(title: str, body: str) -> str:

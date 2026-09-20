@@ -59,6 +59,37 @@ next, so syncs are resumable and safe to interrupt. A 12-month history
 [ARCHITECTURE.md](ARCHITECTURE.md) for how the sync and rule pipeline are
 designed around these constraints.
 
+## Decision ledger (CHP)
+
+Every finding from `run` is a **decision**, gated by the Consensus Hardening
+Protocol (`consensus-hardening-protocol`, ported from the erp-control-plane
+pattern) before any action is recorded:
+
+- **R0 gate** — a finding must be scoped, solvable from the stored invoice data,
+  valid, and worth acting on; ill-posed findings are refused fatally.
+- **Deterministic adversary** — guardrails 40 + bounded result 30 + invoice-data
+  parity 30. Parity re-verifies the flagged anomaly against the snapshot (the
+  duplicate group, the overdue balance, the item baseline, the tax delta), and a
+  mismatch is fatal. Finance floor is 100.
+- **Human lock** — sessions open `EXPLORING` → `PROVISIONAL_LOCK`; a hold-grade
+  finding (severity `high`, i.e. the payment-hold triggers) may not be actioned
+  without a named confirmer: `run --confirmed-by you@company.com`. Advisory
+  flags pass on parity alone. Set `INVOICE_AUDIT_CHP_REQUIRE_HUMAN_LOCK=1` to
+  require a confirmer for every action, `=0` to disable (advisory-only
+  deployments). Refusals are recorded, never silent.
+
+Decisions land in an append-only JSONL ledger (`data/chp_decisions.jsonl`) with
+a SHA-256 body digest, revalidated on read:
+
+```bash
+uv run python -m auditengine.cli run --confirmed-by you@company.com
+uv run python -m auditengine.cli decisions            # or --json
+```
+
+The dashboard exposes the same ledger at `/decisions`. Note the engine has no
+direct Precoro write access — "hold" records the payment-hold decision and its
+authorization trail; placing the actual hold in Precoro is a separate step.
+
 ## Storage
 
 SQLite (`data/audit.db`), deliberately. The workload is small, append-mostly,
@@ -70,7 +101,7 @@ prevents it.
 ## Tests
 
 ```bash
-uv run pytest      # 9 rule tests, pure in-memory SQLite
+uv run pytest      # 9 rule + 3 MCP + 18 CHP decision-layer tests, in-memory SQLite
 uv run ruff check .
 ```
 

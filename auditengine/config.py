@@ -33,6 +33,14 @@ class Settings:
     # Precoro enforces a route-based limit of ~1 request/minute.
     precoro_min_interval_s: float = 62.0
     db_path: Path = DATA_DIR / "audit.db"
+    # CHP decision ledger (append-only JSONL; see auditengine.chp_gate).
+    chp_decisions_path: Path = DATA_DIR / "chp_decisions.jsonl"
+    # Human-lock policy for finding actions. Unset: hold-grade findings (severity
+    # high — the payment-hold triggers) require a named confirmer. "1": every
+    # action requires one. "0": never required (advisory-only deployments).
+    chp_require_human_lock: str = field(
+        default_factory=lambda: os.environ.get("INVOICE_AUDIT_CHP_REQUIRE_HUMAN_LOCK", "")
+    )
 
 
 settings = Settings()

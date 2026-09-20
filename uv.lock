@@ -161,6 +161,15 @@ wheels = [
 ]
 
 [[package]]
+name = "consensus-hardening-protocol"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cb/50/a2d155cba69dce81651aab80d9d2bb76fce504708aad2e4adad88c7ff23a/consensus_hardening_protocol-0.1.1.tar.gz", hash = "sha256:56fdb1c4a7849b9c70e012760bb51e83345e0f680c1942a3309e236c33784ded", size = 51120, upload-time = "2026-08-22T12:17:09.027Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/74/15/f3645824852b81344db849bc1ee9a501ee72b8cdedc7c2b0590dce1d126c/consensus_hardening_protocol-0.1.1-py3-none-any.whl", hash = "sha256:48d53a8817310303619b288493b2784c341bd68f0417cc45e6e09118665a39f5", size = 44703, upload-time = "2026-08-22T12:17:08.065Z" },
+]
+
+[[package]]
 name = "cryptography"
 version = "50.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -295,6 +304,7 @@ name = "invoice-audit-engine"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "consensus-hardening-protocol" },
     { name = "fastapi" },
     { name = "httpx" },
     { name = "mcp" },
@@ -309,6 +319,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "consensus-hardening-protocol", specifier = "==0.1.1" },
     { name = "fastapi", specifier = ">=0.115" },
     { name = "httpx", specifier = ">=0.27" },
     { name = "mcp", specifier = ">=1.2,<2" },
